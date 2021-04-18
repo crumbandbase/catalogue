@@ -1,0 +1,20 @@
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    helm.sh/chart: kiali-operator-1.29.0
+    app: kiali-operator
+    app.kubernetes.io/name: kiali-operator
+    app.kubernetes.io/instance: kiali-operator
+    version: "v1.29.0"
+    app.kubernetes.io/version: "v1.29.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: "kiali-operator"
+annotations:
+  ansible.operator-sdk/verbosity: "1"
+spec:
+  deployment:
+    accessible_namespaces:
+    - '**'
