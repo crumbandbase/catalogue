@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  labels:
+    app.kubernetes.io/name: cloudsqlproxy
+    app.kubernetes.io/instance: cloudsqlproxy
+    app.kubernetes.io/version: "0.0.0"
+    app.kubernetes.io/component: cloudsqlproxy
+    app.kubernetes.io/part-of: cloudsqlproxy
+    app.kubernetes.io/managed-by: kustomize
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: postgresql
+    protocol: TCP
+    name: postgresql
+  selector:
+    app.kubernetes.io/name: cloudsqlproxy
+    app.kubernetes.io/instance: cloudsqlproxy
+    serving: "true"
