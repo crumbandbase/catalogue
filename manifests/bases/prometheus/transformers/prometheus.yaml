@@ -1,0 +1,9 @@
+nameReference:
+- kind: Secret
+  fieldSpecs:
+  - path: spec/additionalAlertManagerConfigs/name
+    kind: Prometheus
+  - path: spec/additionalAlertRelabelConfigs/name
+    kind: Prometheus
+  - path: spec/additionalScrapeConfigs/name
+    kind: Prometheus

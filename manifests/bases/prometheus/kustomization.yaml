@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configurations:
+- transformers/prometheus.yaml
+resources:
+- crds.yaml
+- operator.yaml
+- prometheus.yaml
+secretGenerator:
+- name: prometheus-additional-configs
+  namespace: istio-system
+  files:
+  - config/scrape-config.yaml
