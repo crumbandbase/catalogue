@@ -1,0 +1,55 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istiod-1-9-3
+  namespace: istio-system
+spec:
+  selector:
+    istio: eastwestgateway
+  servers:
+  - port:
+      name: tls-istiod
+      number: 15012
+      protocol: tls
+    tls:
+      mode: PASSTHROUGH
+    hosts:
+    - "*"
+  - port:
+      name: tls-istiodwebhook
+      number: 15017
+      protocol: tls
+    tls:
+      mode: PASSTHROUGH
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istiod-1-9-3
+  namespace: istio-system
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istiod-1-9-3
+  tls:
+  - match:
+    - port: 15012
+      sniHosts:
+      - "*"
+    route:
+    - destination:
+        host: istiod-1-9-3.istio-system.svc.cluster.local
+        port:
+          number: 15012
+  - match:
+    - port: 15017
+      sniHosts:
+      - "*"
+    route:
+    - destination:
+        host: istiod-1-9-3.istio-system.svc.cluster.local
+        port:
+          number: 443
