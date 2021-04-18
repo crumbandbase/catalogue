@@ -1,0 +1,28 @@
+name: test
+on:
+  pull_request:
+jobs:
+  kubeval:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: instrumenta/kubeval-action@master
+      with:
+        version: 1.20.0
+        ignored_path_patterns: kustomization,transformers
+  conftest:
+    runs-on: ubuntu-latest
+    container: openpolicyagent/conftest:v0.24.0
+    env:
+      REGISTRY: europe-west2-docker.pkg.dev
+      PROJECT: crumbandbase
+    steps:
+    - uses: actions/checkout@master
+    - name: actions/setup-container
+      run: apk add --no-cache -q python3 docker
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        version: "338.0.0"
+        service_account_key: ${{ secrets.GCLOUD_AUTH }}
+    - run: gcloud auth configure-docker -q ${REGISTRY}
+    - run: conftest test --policy=. --update oci://${REGISTRY}/${PROJECT}/opa/policy {manifests/bases,components}/
